@@ -4,14 +4,14 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
-import zipkin.server.EnableZipkinServer;
+import de.codecentric.boot.admin.config.EnableAdminServer;
 
-@EnableZipkinServer
+@EnableAdminServer
 @EnableDiscoveryClient
 @SpringBootApplication
-public class ZipkinServiceApplication {
+public class SpringBootAdminApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ZipkinServiceApplication.class, args);
+		SpringApplication.run(SpringBootAdminApplication.class, args);
 	}
 }

@@ -4,14 +4,14 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
-import zipkin.server.EnableZipkinServer;
+import be.ordina.msdashboard.EnableMicroservicesDashboardServer;
 
-@EnableZipkinServer
 @EnableDiscoveryClient
+@EnableMicroservicesDashboardServer
 @SpringBootApplication
-public class ZipkinServiceApplication {
+public class MicroservicesDashboardApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ZipkinServiceApplication.class, args);
+		SpringApplication.run(MicroservicesDashboardApplication.class, args);
 	}
 }
