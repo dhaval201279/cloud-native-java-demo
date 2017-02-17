@@ -73,6 +73,35 @@ Now, on application startup, Eureka Server will register itself. It also provide
 
 #### Important endpoints
 Endpoint	| Description	| 
-:-------------:|:-------------------------:|
+-------------|-------------------------|
 http://localhost:8761	| simple interface, where you can track running services and number of available instances |
 http://localhost:8761/metrics | Provides detailed metric report |
+
+### API Gateway
+For an enterprise application you would want to keep your core domain completely decoupled from its actors (i.e. end user or a service). This is in a way aligning with [Hexagonal Architecture](http://alistair.cockburn.us/Hexagonal+architecture) where actors which are liable to induce changes within system are not dependent on core business domain.
+
+In principle, there will be myriad clients viz. Android app, iOS app, HTML5, IOT device etc who can make requests to each of the microservices directly. But obviously, following [Hexagonal Architecture](http://alistair.cockburn.us/Hexagonal+architecture) we would certainly not like to expose our core domain i.e. reservation-service directly to these clients. Also each of the clients will have specialied concerns and requirements considering their UI/UX capabilities. So rather than retrofitting core business service for each of the clients it is advisable to set up an [Edge service] (http://techblog.netflix.com/2013/06/announcing-zuul-edge-service-in-cloud.html), which is client specific. Key advantage to this approach is - it will act as a single entry point into the system, which will also be used to handle requests for a specific client by routing them to the appropriate backend service or by invoking multiple backend services and [aggregating the results](http://techblog.netflix.com/2013/01/optimizing-netflix-api.html)
+
+Hence we can set up a micro proxy by enabling it with one `@EnableZuulProxy` annotation. In this project, we use Zuul to route requests to appropriate microservices. To augment or change the proxy routes, you can add external configuration within `application.properties` like the following::
+
+```application.properties
+zuul:
+  routes:
+    reservation-client:
+        path: /reservations/**
+        serviceId: reservation-service
+        stripPrefix: false
+
+```
+
+That means all requests starting with `/reservations` will be routed to Reservation service.
+
+How does an edge service know, which instance of downstream service to invoke - It does it via client side load balancing using Ribbon which will be elaborated in subsequent section
+
+++++++ edge to actual service communication (43:30)
+
+#### Ribbon
+Ribbon is a client side load balancer which gives not only gives you a lot of control over the behaviour of HTTP and TCP clients but also implements various load balancing strategies. It in a way has a java code which is responsible for doing the lookup by configuring Ribbon Client
+
+Out of the box, it natively integrates with Spring Cloud and Service Discovery. To include Ribbon in your project use the starter with group `org.springframework.cloud` and artifact id `spring-cloud-starter-ribbon`
+
