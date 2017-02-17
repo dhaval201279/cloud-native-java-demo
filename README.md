@@ -53,3 +53,26 @@ This can be primarily be used for :
 - Feature flags and toggle for disabling a given functionality
 - Dynamic reconfiguration which allows us to do [A/B Testing] (https://en.wikipedia.org/wiki/A/B_testing)
 - [Branch by abstraction] (https://martinfowler.com/bliki/BranchByAbstraction.html)
+
+### Service discovery
+
+One of the key tenats of Microservice Architecture pattern is Service discovery. With Microservice Architecture one would generally have myriad set of services and keeping track of each of them in distributed topology would be too cumbersome and time consuming. Hence we need a service registry which can keep track of all the services - not only the ones which are newly created but also ones which have been deleted. It allows automatic detection of service instances.
+
+Most significant part of Service discovery is Registry. We will be using Netflix Eureka in this application. With Spring Boot, you can easily build Eureka Registry with `spring-cloud-starter-eureka-server` dependency, `@EnableEurekaServer` annotation and simple configuration properties.
+``` bootstrap.properties
+spring.cloud.config.uri = http://localhost:8888
+spring.application.name = eureka-service
+```
+Client support can be enabled with `@EnableDiscoveryClient` annotation an `bootstrap.properties` with application name:
+``` `bootstrap.properties`
+spring.cloud.config.uri = http://localhost:8888
+spring.application.name = reservation-service
+```
+
+Now, on application startup, Eureka Server will register itself. It also provide meta-data such as host and port, health indicator URL etc. Eureka receives heartbeat messages from each instance belonging to a service. If the heartbeat fails over a configurable timetable, the instance will be removed from the registry.
+
+#### Important endpoints
+Endpoint	| Description	| 
+:-------------:|:-------------------------:|
+http://localhost:8761	| simple interface, where you can track running services and number of available instances |
+http://localhost:8761/metrics | Provides detailed metric report |
