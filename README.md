@@ -25,7 +25,7 @@ There are industry standard [cloud patterns] (http://cloudpatterns.org/) which c
 
 I will cover some of them as we proceed further.
 <p align=center>
-<img alt="Infrastructure services" src="https://cloud.githubusercontent.com/assets/3782824/22853336/d1099d62-f079-11e6-885f-c7835f0a5f89.png">
+<img alt="Infrastructure services" src="https://cloud.githubusercontent.com/assets/3782824/23085096/bef7a576-f58b-11e6-9332-be3cd70ae0b7.png">
 </p>
 
 ### Config service
