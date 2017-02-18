@@ -82,9 +82,9 @@ For an enterprise application you would want to keep your core domain completely
 
 In principle, there will be myriad clients viz. Android app, iOS app, HTML5, IOT device etc who can make requests to each of the microservices directly. But obviously, following [Hexagonal Architecture](http://alistair.cockburn.us/Hexagonal+architecture) we would certainly not like to expose our core domain i.e. reservation-service directly to these clients. Also each of the clients will have specialied concerns and requirements considering their UI/UX capabilities. So rather than retrofitting core business service for each of the clients it is advisable to set up an [Edge service] (http://techblog.netflix.com/2013/06/announcing-zuul-edge-service-in-cloud.html), which is client specific. Key advantage to this approach is - it will act as a single entry point into the system, which will also be used to handle requests for a specific client by routing them to the appropriate backend service or by invoking multiple backend services and [aggregating the results](http://techblog.netflix.com/2013/01/optimizing-netflix-api.html)
 
-Hence we can set up a micro proxy by enabling it with one `@EnableZuulProxy` annotation. In this project, we use Zuul to route requests to appropriate microservices. To augment or change the proxy routes, you can add external configuration within `application.properties` like the following::
+Hence we can set up a micro proxy by enabling it with one `@EnableZuulProxy` annotation. In this project, we use Zuul to route requests to appropriate microservices. To augment or change the proxy routes, you can add external configuration within `application.yml` like the following:
 
-```application.properties
+```application.yml
 zuul:
   routes:
     reservation-client:
@@ -96,12 +96,33 @@ zuul:
 
 That means all requests starting with `/reservations` will be routed to Reservation service.
 
-How does an edge service know, which instance of downstream service to invoke - It does it via client side load balancing using Ribbon which will be elaborated in subsequent section
+How does an edge service know, which instance of downstream service to invoke - It does it via client side load balancing using Ribbon whose use within the context of application is explained below.
 
 ++++++ edge to actual service communication (43:30)
 
 #### Ribbon
-Ribbon is a client side load balancer which gives not only gives you a lot of control over the behaviour of HTTP and TCP clients but also implements various load balancing strategies. It in a way has a java code which is responsible for doing the lookup by configuring Ribbon Client
+Ribbon is a client side load balancer which not only gives you a lot of control over the behaviour of HTTP and TCP clients but also implements various load balancing strategies. It in a way has java based implementation which is responsible for doing the lookup via Ribbon Client configurations
 
-Out of the box, it natively integrates with Spring Cloud and Service Discovery. To include Ribbon in your project use the starter with group `org.springframework.cloud` and artifact id `spring-cloud-starter-ribbon`
+Out of the box, it integrates with Spring Cloud and Service Discovery. To include Ribbon in your project use the starter with group `org.springframework.cloud` and artifact id `spring-cloud-starter-ribbon`
+
+One can still do a declarative way of doing load balancing explicitly by injecting [`RestTemplate`] (http://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/client/RestTemplate.html) along with [`@LoadBalanced`] (http://cloud.spring.io/spring-cloud-static/spring-cloud.html#_spring_resttemplate_as_a_load_balancer_client) annotation. Since this looks like a boiler plate code, it can be avoided by using [Feign] (https://github.com/OpenFeign/feign) whose use within the context of application is explained below.
+
+#### Feign
+Feign is a declarative web service / Http client, which seamlessly integrates with Ribbon, Eureka and Hystrix to facilitate resilient load balanced client. So with just `spring-cloud-starter-feign` dependency and `@EnableFeignClients` annotation you have a complete set of Load balancer, Circuit breaker and Http client with sensible ready-to-go default configuration.
+
+Here is an example from Account Service:
+
+``` java
+@FeignClient(name = "statistics-service")
+public interface StatisticsServiceClient {
+
+	@RequestMapping(method = RequestMethod.PUT, value = "/statistics/{accountName}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	void updateStatistics(@PathVariable("accountName") String accountName, Account account);
+
+}
+```
+
+- Everything you need is just an interface
+- You can share `@RequestMapping` part between Spring MVC controller and Feign methods
+- Above example specifies just desired service id - `statistics-service`, thanks to autodiscovery through Eureka (but obviously you can access any resource with a specific url)
 
