@@ -122,9 +122,16 @@ interface ReservationReader {
 Each feign client is part of an ensemble of components `ApplicationContext` for each named client using `FeignClientsConfiguration` which contains (amongst other things) a feign.Decoder, a feign.Encoder, and a feign.Contract.
 
 #### Hystrix
-Hystrix is an implementation of [Circuit Breaker pattern](http://martinfowler.com/bliki/CircuitBreaker.html), which allows to have  control over latency and failure of dependencies accessed over the network. In high performing enterprising application failures are inevitable and hence there has to be mechanisms for gracefully handling them. The main idea is to gracefully handle cascading effect of failures in a distributed environment; With Microservice Architecture this becomes extremely imperative as it helps to fail fast with gracefull degradation - which is fundamental characteristic of any fault-tolerant systems i.e. They self-heal!
+Hystrix is an implementation of [Circuit Breaker pattern](http://martinfowler.com/bliki/CircuitBreaker.html), which allows to have  control over latency and failure of dependencies accessed over the network. In high performing enterprise application, failures are inevitable and hence there has to be mechanisms for gracefully handling them. The main idea is to gracefully handle cascading effect of failures in a distributed environment; With Microservice Architecture this becomes extremely imperative as it helps to fail fast with gracefull degradation - which is fundamental characteristic of any fault-tolerant systems i.e. They self-heal!
 
 With Hystrix you can add a fallback method that will be executed in case the main command fails.
 
+Can we achieve similar kind of behavior for insert / update operations? Answer is YES, and hence application uses [RabbitMQ](https://www.rabbitmq.com/) as message broker. Underlying prcinciple is to model our system such that transactions are inter-leavable, such that each of those transaction has compensatory transactions, so that it can be replayed as many times as necessary. This in a way ensures that system remains in semantically consistent state - which is also know as [eventual consistency] (https://en.wikipedia.org/wiki/Eventual_consistency).
+
+This can be implemented using [Spring Integration](https://projects.spring.io/spring-integration/) as it uses message channels to connect with different systems via Grogor Hope's [EIP](http://www.enterpriseintegrationpatterns.com/). So in our application we will use [Spring Cloud streams](https://cloud.spring.io/spring-cloud-stream/) which provides a framework for building message driven microservice applications. Implicitly it uses Spring Integration for providing connectivity to message brokers
+
+===========
 Moreover, Hystrix generates metrics on execution outcomes and latency for each command, that we can use to [monitor system behavior](https://github.com/sqshq/PiggyMetrics#monitor-dashboard).
+
+
 
