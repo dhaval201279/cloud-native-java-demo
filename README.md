@@ -110,19 +110,21 @@ One can still do a declarative way of doing load balancing explicitly by injecti
 #### Feign
 Feign is a declarative web service / Http client, which seamlessly integrates with Ribbon, Eureka and Hystrix to facilitate resilient load balanced client. So with just `spring-cloud-starter-feign` dependency and `@EnableFeignClients` annotation you have a complete set of Load balancer, Circuit breaker and Http client with sensible ready-to-go default configuration.
 
-Here is an example from Account Service:
+Here is an example from Reservation Client:
 
 ``` java
-@FeignClient(name = "statistics-service")
-public interface StatisticsServiceClient {
-
-	@RequestMapping(method = RequestMethod.PUT, value = "/statistics/{accountName}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	void updateStatistics(@PathVariable("accountName") String accountName, Account account);
-
+@FeignClient("reservation-service")
+interface ReservationReader {
+	@RequestMapping(method = RequestMethod.GET, value="/reservations")
+	Resources<Reservation> read();
 }
 ```
+Each feign client is part of an ensemble of components `ApplicationContext` for each named client using `FeignClientsConfiguration` which contains (amongst other things) a feign.Decoder, a feign.Encoder, and a feign.Contract.
 
-- Everything you need is just an interface
-- You can share `@RequestMapping` part between Spring MVC controller and Feign methods
-- Above example specifies just desired service id - `statistics-service`, thanks to autodiscovery through Eureka (but obviously you can access any resource with a specific url)
+#### Hystrix
+Hystrix is an implementation of [Circuit Breaker pattern](http://martinfowler.com/bliki/CircuitBreaker.html), which allows to have  control over latency and failure of dependencies accessed over the network. In high performing enterprising application failures are inevitable and hence there has to be mechanisms for gracefully handling them. The main idea is to gracefully handle cascading effect of failures in a distributed environment; With Microservice Architecture this becomes extremely imperative as it helps to fail fast with gracefull degradation - which is fundamental characteristic of any fault-tolerant systems i.e. They self-heal!
+
+With Hystrix you can add a fallback method that will be executed in case the main command fails.
+
+Moreover, Hystrix generates metrics on execution outcomes and latency for each command, that we can use to [monitor system behavior](https://github.com/sqshq/PiggyMetrics#monitor-dashboard).
 
