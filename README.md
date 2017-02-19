@@ -152,6 +152,7 @@ Microservice dashboard is a visual representation of microservices and its ecosy
 - Resources
 - Microservices
 - Backends
+
 It mainly collates information from Spring Boot Actuator health endpoints.
 
 Primarily it comprises of 3 components -
