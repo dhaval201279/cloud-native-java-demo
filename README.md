@@ -1,6 +1,6 @@
 # Reservation Service
 
-**A faceless application which allows user to manage Reservatioins**
+**An application which allows user to manage Reservatioins**
 
 This is a POC application which does not have a UI, with a purpose of demonstrating [Microservice Architecture Pattern](http://martinfowler.com/microservices/) using [Spring Boot](https://projects.spring.io/spring-boot/) and leveraging [Cloud Native Architecture](https://pivotal.io/cloud-native) via [Spring Cloud](http://projects.spring.io/spring-cloud/).
 
@@ -127,6 +127,8 @@ Hystrix is an implementation of [Circuit Breaker pattern](http://martinfowler.co
 With Hystrix you can add a fallback method that will be executed in case the main command fails.
 
 Moreover, Hystrix generates metrics via `/health` and this can be used to monitor health of each circuit breaker efficiently.
+To include the Hystrix Dashboard in our project we have used the starter with group `org.springframework.cloud` and artifact id `spring-cloud-starter-hystrix-dashboard`. For running the Hystrix Dashboard annotate your Spring Boot main class with `@EnableHystrixDashboard`. You then visit `/hystrix` and point the dashboard to an individual instances `/hystrix.stream` endpoint in a Hystrix client application. It initiates heart beat stream which comes off from Edge Service
+
 ====== image of hystrix dashboard
 
 Can we achieve similar kind of behavior for insert / update operations? Answer is YES, and hence application uses [RabbitMQ](https://www.rabbitmq.com/) as message broker. Underlying prcinciple is to model our system such that transactions are inter-leavable, such that each of those transaction has compensatory transactions, so that it can be replayed as many times as necessary. This in a way ensures that system remains in semantically consistent state - which is also know as [eventual consistency] (https://en.wikipedia.org/wiki/Eventual_consistency).
