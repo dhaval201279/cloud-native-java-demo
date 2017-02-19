@@ -129,7 +129,9 @@ With Hystrix you can add a fallback method that will be executed in case the mai
 Moreover, Hystrix generates metrics via `/health` and this can be used to monitor health of each circuit breaker efficiently.
 To include the Hystrix Dashboard in our project we have used the starter with group `org.springframework.cloud` and artifact id `spring-cloud-starter-hystrix-dashboard`. For running the Hystrix Dashboard annotate your Spring Boot main class with `@EnableHystrixDashboard`. You then visit `/hystrix` and point the dashboard to an individual instances `/hystrix.stream` endpoint in a Hystrix client application. It initiates heart beat stream which comes off from Edge Service
 
-====== image of hystrix dashboard
+<p align=center>
+<img alt="Hystrix Dashboard" src="https://cloud.githubusercontent.com/assets/3782824/23101227/b1227faa-f6b4-11e6-970b-0532f11a415d.png">
+</p>
 
 Can we achieve similar kind of behavior for insert / update operations? Answer is YES, and hence application uses [RabbitMQ](https://www.rabbitmq.com/) as message broker. Underlying prcinciple is to model our system such that transactions are inter-leavable, such that each of those transaction has compensatory transactions, so that it can be replayed as many times as necessary. This in a way ensures that system remains in semantically consistent state - which is also know as [eventual consistency] (https://en.wikipedia.org/wiki/Eventual_consistency).
 
@@ -138,7 +140,9 @@ This can be implemented using [Spring Integration](https://projects.spring.io/sp
 #### Zipkin
 Considering the fact thath there will be myriad set of microservices, distribution tracing becomes an inevitable characteristic of the infrastructure. Distributed tracing in a way will assist us in having better systemic view and observability. So Zipkin will ensure that request is traced from one service to another till the response is sent back to the end user. Spring provides [Spring Cloud Sleuth](http://cloud.spring.io/spring-cloud-static/Camden.SR5/#_spring_cloud_sleuth)
 
-========= Image of zipkin traces
+<p align=center>
+<img alt="Zipkin Tracing" src="https://cloud.githubusercontent.com/assets/3782824/23101228/b8b951bc-f6b4-11e6-912d-cb67d70ed38c.png">
+</p>
 
 
 
