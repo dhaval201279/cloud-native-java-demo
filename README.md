@@ -98,8 +98,6 @@ That means all requests starting with `/reservations` will be routed to Reservat
 
 How does an edge service know, which instance of downstream service to invoke - It does it via client side load balancing using Ribbon whose use within the context of application is explained below.
 
-++++++ edge to actual service communication (43:30)
-
 #### Ribbon
 Ribbon is a client side load balancer which not only gives you a lot of control over the behaviour of HTTP and TCP clients but also implements various load balancing strategies. It in a way has java based implementation which is responsible for doing the lookup via Ribbon Client configurations
 
@@ -138,11 +136,17 @@ Can we achieve similar kind of behavior for insert / update operations? Answer i
 This can be implemented using [Spring Integration](https://projects.spring.io/spring-integration/) as it uses message channels to connect with different systems via [Enterprise Integration Patterns](http://www.enterpriseintegrationpatterns.com/). So in our application we will use [Spring Cloud stream](https://cloud.spring.io/spring-cloud-stream/) which provides a framework for building message driven microservice applications. Implicitly it uses Spring Integration for providing connectivity to underlying message brokers
 
 #### Zipkin
-Considering the fact thath there will be myriad set of microservices, distribution tracing becomes an inevitable characteristic of the infrastructure. Distributed tracing in a way will assist us in having better systemic view and observability. So Zipkin will ensure that request is traced from one service to another till the response is sent back to the end user. Spring provides [Spring Cloud Sleuth](http://cloud.spring.io/spring-cloud-static/Camden.SR5/#_spring_cloud_sleuth)
+Considering the fact thath there will be myriad set of microservices, distribution tracing becomes an inevitable characteristic of the infrastructure. Distributed tracing in a way will assist us in having better systemic view and observability. So Zipkin will ensure that request is traced from one service to another till the response is sent back to the end user. Spring provides [Spring Cloud Sleuth](http://cloud.spring.io/spring-cloud-static/Camden.SR5/#_spring_cloud_sleuth) which implements distributed tracing solution for [Spring Cloud](http://projects.spring.io/spring-cloud/)
 
 <p align=center>
 <img alt="Zipkin Tracing" src="https://cloud.githubusercontent.com/assets/3782824/23101228/b8b951bc-f6b4-11e6-912d-cb67d70ed38c.png">
 </p>
+
+#### Authentication & Authorization
+We use Spring cloud OAuth module to achieve the same with some pre configured user details with their credentials. It leverages Spring Security for achieving required functionality
+
+
+
 
 
 
