@@ -135,6 +135,10 @@ Can we achieve similar kind of behavior for insert / update operations? Answer i
 
 This can be implemented using [Spring Integration](https://projects.spring.io/spring-integration/) as it uses message channels to connect with different systems via [Enterprise Integration Patterns](http://www.enterpriseintegrationpatterns.com/). So in our application we will use [Spring Cloud stream](https://cloud.spring.io/spring-cloud-stream/) which provides a framework for building message driven microservice applications. Implicitly it uses Spring Integration for providing connectivity to underlying message brokers
 
+#### Zipkin
+Considering the fact thath there will be myriad set of microservices, distribution tracing becomes an inevitable characteristic of the infrastructure. Distributed tracing in a way will assist us in having better systemic view and observability. So Zipkin will ensure that request is traced from one service to another till the response is sent back to the end user. Spring provides [Spring Cloud Sleuth](http://cloud.spring.io/spring-cloud-static/Camden.SR5/#_spring_cloud_sleuth)
+
+========= Image of zipkin traces
 
 
 
