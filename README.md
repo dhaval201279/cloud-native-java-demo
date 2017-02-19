@@ -159,6 +159,7 @@ Primarily it comprises of 3 components -
 - Spring Boot Admin Server
 - Spring Boot Admin UI Server
 - Microservices Dashboard Server
+
 Having said that, for our POC application we will be implementing Admin server and Admin UI Server as a single microservice application i.e. [Spring Boot Admin](https://github.com/dhaval201279/cloud-native-java-demo/tree/master/spring-boot-admin) and a separate application for [Microservices Dashboard](https://github.com/dhaval201279/cloud-native-java-demo/tree/master/microservices-dashboard). A sample screenshot of Microservice Dasboard for our POC application is as shown below :
 
 <p align=center>
