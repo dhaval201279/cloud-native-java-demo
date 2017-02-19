@@ -156,17 +156,11 @@ Microservice dashboard is a visual representation of microservices and its ecosy
 It mainly collates information from Spring Boot Actuator health endpoints.
 
 Primarily it comprises of 3 components -
-1. Spring Boot Admin Server
-2. Spring Boot Admin UI Server
-3. Microservices Dashboard Server
-Having said that, for our POC application we will be implementing Admin server and Admin UI Server as a single microservice application i.e. [Spring Boot Admin](https://github.com/dhaval201279/cloud-native-java-demo/tree/master/spring-boot-admin) and a separate application for [Microservices Dashboard](https://github.com/dhaval201279/cloud-native-java-demo/tree/master/microservices-dashboard). A sample screenshot for our POC application
+- Spring Boot Admin Server
+- Spring Boot Admin UI Server
+- Microservices Dashboard Server
+Having said that, for our POC application we will be implementing Admin server and Admin UI Server as a single microservice application i.e. [Spring Boot Admin](https://github.com/dhaval201279/cloud-native-java-demo/tree/master/spring-boot-admin) and a separate application for [Microservices Dashboard](https://github.com/dhaval201279/cloud-native-java-demo/tree/master/microservices-dashboard). A sample screenshot of Microservice Dasboard for our POC application is as shown below :
 
 <p align=center>
 <img alt="Microservice Dashboard" src="https://cloud.githubusercontent.com/assets/3782824/23105287/f7f122d0-f702-11e6-9f13-9f3eb584c8a2.png">
 </p>
-
-
-
-
-
-
