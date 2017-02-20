@@ -49,7 +49,7 @@ In our application, `MessageRestController` within [reservation-service](https:/
 First, change required properties in Config server. Then, perform refresh request to reservation-service:
 `curl -d{} http://localhost:8000/refresh` and there after try accessing `http://localhost:8000/message`
 
-#### Notes
+##### Notes
 [Spring Cloud Config](http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html) can be primarily be used for :
 - Feature flags and toggle for disabling a given functionality
 - Dynamic reconfiguration which allows us to do [A/B Testing] (https://en.wikipedia.org/wiki/A/B_testing)
@@ -99,14 +99,14 @@ That means all requests starting with `/reservations` will be routed to Reservat
 
 How does an edge service know, which instance of downstream service to invoke - It does it via client side load balancing using Ribbon whose use within the context of application is explained below.
 
-#### Ribbon
+### Ribbon
 Ribbon is a client side load balancer which not only gives you a lot of control over the behaviour of HTTP and TCP clients but also implements various load balancing strategies. It in a way has java based implementation which is responsible for doing the lookup via Ribbon Client configurations
 
 Out of the box, it integrates with Spring Cloud and Service Discovery. To include Ribbon in your project use the starter with group `org.springframework.cloud` and artifact id `spring-cloud-starter-ribbon`
 
 One can still do a declarative way of doing load balancing explicitly by injecting [`RestTemplate`] (http://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/client/RestTemplate.html) along with [`@LoadBalanced`] (http://cloud.spring.io/spring-cloud-static/spring-cloud.html#_spring_resttemplate_as_a_load_balancer_client) annotation. Since this looks like a boiler plate code, it can be avoided by using [Feign] (https://github.com/OpenFeign/feign) whose use within the context of application is explained below.
 
-#### Feign
+### Feign
 Feign is a declarative web service / Http client, which seamlessly integrates with Ribbon, Eureka and Hystrix to facilitate resilient load balanced client. So with just `spring-cloud-starter-feign` dependency and `@EnableFeignClients` annotation you have a complete set of Load balancer, Circuit breaker and Http client with sensible ready-to-go default configurations.
 
 Here is an example from Reservation Client:
@@ -120,7 +120,7 @@ interface ReservationReader {
 ```
 Each feign client is part of an ensemble of components `ApplicationContext` for each named client using `FeignClientsConfiguration` which contains (amongst other things) a feign.Decoder, a feign.Encoder, and a feign.Contract.
 
-#### Hystrix
+### Hystrix
 Hystrix is an implementation of [Circuit Breaker pattern](http://martinfowler.com/bliki/CircuitBreaker.html), which allows to have  control over latency and failure of dependencies accessed over the network. In high performing enterprise application, failures are inevitable and hence there has to be mechanisms for gracefully handling them. The main idea is to gracefully handle cascading effect of failures in a distributed environment; With Microservice Architecture this becomes extremely imperative as it helps to fail fast with gracefull degradation - which is a fundamental characteristic of any fault-tolerant systems i.e. They self-heal!
 
 With Hystrix you can add a fallback method that will be executed in case the main command fails.
@@ -136,15 +136,33 @@ Can we achieve similar kind of behavior for insert / update operations? Answer i
 
 This can be implemented using [Spring Integration](https://projects.spring.io/spring-integration/) as it uses message channels to connect with different systems via [Enterprise Integration Patterns](http://www.enterpriseintegrationpatterns.com/). So in our application we will use [Spring Cloud stream](https://cloud.spring.io/spring-cloud-stream/) which provides a framework for building message driven microservice applications. Implicitly it uses Spring Integration for providing connectivity to underlying message brokers
 
-#### Zipkin
+### Zipkin
 Considering the fact that there will be myriad set of microservices, distributed tracing becomes an inevitable characteristic of the infrastructure. Distributed tracing in a way will assist us in having better systemic view and observability of system in whole. So Zipkin will ensure that request is traced from one service to another till the response is sent back. We will be using [Spring Cloud Sleuth](http://cloud.spring.io/spring-cloud-static/Camden.SR5/#_spring_cloud_sleuth) for enabling distributed tracing within our solution.
 
 <p align=center>
 <img alt="Zipkin Tracing" src="https://cloud.githubusercontent.com/assets/3782824/23101228/b8b951bc-f6b4-11e6-912d-cb67d70ed38c.png">
 </p>
 
-#### Authentication & Authorization
+### Authentication & Authorization
 In order to provide Authentication and Authorization, we will be leveraging [OAuth2](https://oauth.net/2/). Spring provides Spring cloud OAuth module via `spring-cloud-starter-oauth2` to achieve the same with some pre configured user along with their credentials. As an underlying framework it leverages [Spring Security](https://projects.spring.io/spring-security/).
+
+##### How to use this service for accessing Reservation services
+- Send a POST to http://localhost:9191/uaa/oauth/token to fetch access token. Response would look like -
+``` JSON - Auth Response
+	{
+	  "access_token": "f1175786-e525-40d3-8389-fffa133c8d84",
+	  "token_type": "bearer",
+	  "expires_in": 43199,
+	  "scope": "openid"
+	}
+````	
+- Use above access token whilst invoking read / update Reservation Service i.e.
+
+a. curl -H"authorization: bearer fd3444b6-0e2a-4d54-ab9b-778146b599d5" http://localhost:9999/reservations/names
+b. curl -X POST -H "authorization: bearer fd3444b6-0e2a-4d54-ab9b-778146b599d5" -H "Content-Type: application/json" -d "{\"reservationName\" : \"Dr. Jigar Patel\"}" http://localhost:9999/reservations
+
+##### Note
+We can remove authentication and authorization module by removing Spring Oauth dependency from Rservation client pom
 
 #### Microservices Dashboard
 Microservice dashboard is a visual representation of microservices and its ecosystem. Systemic view of microservice can be be mainly categorized into -
