@@ -161,9 +161,9 @@ JSON - Auth Response
 - curl -X POST -H "authorization: bearer fd3444b6-0e2a-4d54-ab9b-778146b599d5" -H "Content-Type: application/json" -d "{\"reservationName\" : \"Dr. Jigar Patel\"}" http://localhost:9999/reservations
 
 ##### Note
-We can remove authentication and authorization module by removing Spring Oauth dependency from Rservation client pom
+We can remove authentication and authorization module by removing Spring Oauth dependency from [Reservation client pom](https://github.com/dhaval201279/cloud-native-java-demo/blob/master/reservation-client/pom.xml)
 
-#### Microservices Dashboard
+### Microservices Dashboard
 Microservice dashboard is a visual representation of microservices and its ecosystem. Systemic view of microservice can be be mainly categorized into -
 - UI
 - Resources
