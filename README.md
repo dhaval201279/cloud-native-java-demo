@@ -147,19 +147,18 @@ Considering the fact that there will be myriad set of microservices, distributed
 In order to provide Authentication and Authorization, we will be leveraging [OAuth2](https://oauth.net/2/). Spring provides Spring cloud OAuth module via `spring-cloud-starter-oauth2` to achieve the same with some pre configured user along with their credentials. As an underlying framework it leverages [Spring Security](https://projects.spring.io/spring-security/).
 
 ##### How to use this service for accessing Reservation services
-- Send a POST to http://localhost:9191/uaa/oauth/token to fetch access token. Response would look like -
-``` JSON - Auth Response
+- Send a POST to http://localhost:9191/uaa/oauth/token to fetch access token. Response would look like
+JSON - Auth Response
 	{
 	  "access_token": "f1175786-e525-40d3-8389-fffa133c8d84",
 	  "token_type": "bearer",
 	  "expires_in": 43199,
 	  "scope": "openid"
-	}
-````	
+	
 - Use above access token whilst invoking read / update Reservation Service i.e.
 
-a. curl -H"authorization: bearer fd3444b6-0e2a-4d54-ab9b-778146b599d5" http://localhost:9999/reservations/names
-b. curl -X POST -H "authorization: bearer fd3444b6-0e2a-4d54-ab9b-778146b599d5" -H "Content-Type: application/json" -d "{\"reservationName\" : \"Dr. Jigar Patel\"}" http://localhost:9999/reservations
+- curl -H"authorization: bearer fd3444b6-0e2a-4d54-ab9b-778146b599d5" http://localhost:9999/reservations/names
+- curl -X POST -H "authorization: bearer fd3444b6-0e2a-4d54-ab9b-778146b599d5" -H "Content-Type: application/json" -d "{\"reservationName\" : \"Dr. Jigar Patel\"}" http://localhost:9999/reservations
 
 ##### Note
 We can remove authentication and authorization module by removing Spring Oauth dependency from Rservation client pom
