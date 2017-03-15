@@ -21,7 +21,7 @@ GET	| /reservations/names	| Gets entire list of reservations done by user	| × |
 POST	| /reservations/	| Creates reservations for a given user	|   | ×
 
 ## Infrastructure Services
-There are industry standard [cloud patterns] (http://cloudpatterns.org/) which can help us to ease out infrastructure and operational concerns. 
+There are industry standard [cloud patterns](http://cloudpatterns.org/) which can help us to ease out infrastructure and operational concerns. 
 [Spring cloud](http://projects.spring.io/spring-cloud/) provides tools for developers to quickly build some of the common patterns in distributed systems (e.g. configuration management, service discovery, circuit breakers, intelligent routing etc.)
 
 I will cover some of them as we proceed further.
@@ -104,7 +104,7 @@ Ribbon is a client side load balancer which not only gives you a lot of control 
 
 Out of the box, it integrates with Spring Cloud and Service Discovery. To include Ribbon in your project use the starter with group `org.springframework.cloud` and artifact id `spring-cloud-starter-ribbon`
 
-One can still do a declarative way of doing load balancing explicitly by injecting [`RestTemplate`] (http://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/client/RestTemplate.html) along with [`@LoadBalanced`] (http://cloud.spring.io/spring-cloud-static/spring-cloud.html#_spring_resttemplate_as_a_load_balancer_client) annotation. Since this looks like a boiler plate code, it can be avoided by using [Feign] (https://github.com/OpenFeign/feign) whose use within the context of application is explained below.
+One can still do a declarative way of doing load balancing explicitly by injecting [`RestTemplate`](http://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/client/RestTemplate.html) along with [`@LoadBalanced`] (http://cloud.spring.io/spring-cloud-static/spring-cloud.html#_spring_resttemplate_as_a_load_balancer_client) annotation. Since this looks like a boiler plate code, it can be avoided by using [Feign](https://github.com/OpenFeign/feign) whose use within the context of application is explained below.
 
 ### Feign
 Feign is a declarative web service / Http client, which seamlessly integrates with Ribbon, Eureka and Hystrix to facilitate resilient load balanced client. So with just `spring-cloud-starter-feign` dependency and `@EnableFeignClients` annotation you have a complete set of Load balancer, Circuit breaker and Http client with sensible ready-to-go default configurations.
@@ -132,7 +132,7 @@ To include the Hystrix Dashboard in our project we have used the starter with gr
 <img alt="Hystrix Dashboard" src="https://cloud.githubusercontent.com/assets/3782824/23101227/b1227faa-f6b4-11e6-970b-0532f11a415d.png">
 </p>
 
-Can we achieve similar kind of behavior for insert / update operations? Answer is YES, and hence POC application makes use of [RabbitMQ](https://www.rabbitmq.com/) as message broker. Underlying prcinciple is to model our system such that transactions are inter-leavable, such that each of those transaction has compensatory transactions, so that it can be replayed as many times as necessary. This in a way ensures that system remains in semantically consistent state - which is also know as [eventual consistency] (https://en.wikipedia.org/wiki/Eventual_consistency).
+Can we achieve similar kind of behavior for insert / update operations? Answer is YES, and hence POC application makes use of [RabbitMQ](https://www.rabbitmq.com/) as message broker. Underlying prcinciple is to model our system such that transactions are inter-leavable, such that each of those transaction has compensatory transactions, so that it can be replayed as many times as necessary. This in a way ensures that system remains in semantically consistent state - which is also know as [eventual consistency](https://en.wikipedia.org/wiki/Eventual_consistency).
 
 This can be implemented using [Spring Integration](https://projects.spring.io/spring-integration/) as it uses message channels to connect with different systems via [Enterprise Integration Patterns](http://www.enterpriseintegrationpatterns.com/). So in our application we will use [Spring Cloud stream](https://cloud.spring.io/spring-cloud-stream/) which provides a framework for building message driven microservice applications. Implicitly it uses Spring Integration for providing connectivity to underlying message brokers
 
@@ -164,7 +164,7 @@ JSON - Auth Response
 We can remove authentication and authorization module by removing Spring Oauth dependency from [Reservation client pom](https://github.com/dhaval201279/cloud-native-java-demo/blob/master/reservation-client/pom.xml)
 
 ### Microservices Dashboard
-Microservice dashboard is a visual representation of microservices and its ecosystem. Systemic view of microservice can be be mainly categorized into -
+Since with Microservices Architecture, an application will have myriad set of services (i.e. > 100). Hence it is quiet important to have bird's eye view of the entire architecture. Thanks to [JWorks](https://github.com/ordina-jworks) for providing dashboard application which can provide visual representation of microservices architecture and its ecosystem. Systemic view of microservice can be be mainly categorized into -
 - UI
 - Resources
 - Microservices
