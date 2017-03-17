@@ -65,7 +65,7 @@ spring.cloud.config.uri = http://localhost:8888
 spring.application.name = eureka-service
 ```
 Client support can be enabled with `@EnableDiscoveryClient` annotation an `bootstrap.properties` with application name:
-``` `bootstrap.properties`
+``` bootstrap.properties
 spring.cloud.config.uri = http://localhost:8888
 spring.application.name = reservation-service
 ```
@@ -182,3 +182,6 @@ Having said that, for our POC application we will be implementing Admin server a
 <p align=center>
 <img alt="Microservice Dashboard" src="https://cloud.githubusercontent.com/assets/3782824/23105287/f7f122d0-f702-11e6-9f13-9f3eb584c8a2.png">
 </p>
+
+### Open for feedback
+Feel free to contact me in case of queries or calrifications if any.
