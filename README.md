@@ -184,4 +184,4 @@ Having said that, for our POC application we will be implementing Admin server a
 </p>
 
 ### Open for feedback
-Feel free to contact me in case of queries or calrifications if any.
+Feel free to contact me in case of queries or clarifications if any.
